@@ -1,0 +1,51 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+}
+
+.table {
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.btn {
+    border-radius: 25px;
+}
+
+.modal-header {
+    background-color: #243B55;
+    color: white;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.custom-file-input {
+    display: none; /* Oculta el input original */
+}
+
+.custom-file-label {
+    background-color: #243B55;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-label:hover {
+    background-color: #1b2d3c;
+}

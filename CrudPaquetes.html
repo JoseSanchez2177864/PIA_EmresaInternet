@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Paquetes</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/cruds.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <!-- Tables.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tablesorter/dist/css/theme.bootstrap_4.min.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"><i class="fas fa-wifi"></i> SpectraNet</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active"><a class="nav-link" href="CrudPaquetes.html">Paquetes</a></li>
+                <li class="nav-item"><a class="nav-link" href="CrudUsuario.html">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" href="CrudOpiniones.html">Opiniones</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Gestión de Paquetes</h2>
+            <button class="btn btn-primary" id="addPackageBtn"><i class="fas fa-plus-circle"></i> Crear Paquete</button>
+        </div>
+        <table id="packagesTable" class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Descripción</th>
+                    <th>Imagen</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se generarán las filas dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal para Crear/Editar Paquete -->
+    <div class="modal fade" id="packageModal" tabindex="-1" aria-labelledby="packageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="packageModalLabel">Crear Paquete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="packageForm">
+                        <div class="form-group">
+                            <label for="packageName">Nombre</label>
+                            <input type="text" class="form-control" id="packageName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="packagePrice">Precio</label>
+                            <input type="number" class="form-control" id="packagePrice" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="packageDescription">Descripción</label>
+                            <textarea class="form-control" id="packageDescription" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="packageImage">Imagen</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="packageImage" accept="image/*">
+                                <label class="custom-file-label" for="packageImage">Seleccionar archivo</label>
+                            </div>
+                        </div>
+                        
+                        <input type="hidden" id="packageId">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap y Tables.js JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tablesorter/dist/js/jquery.tablesorter.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tablesorter/dist/js/jquery.tablesorter.widgets.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="js/paquetes.js"></script>
+</body>
+</html>
