@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paquetes</title>
+    <title>Compra de Paquete</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
@@ -25,7 +25,6 @@
                     <a class="nav-link" href="nosotros.html">Sobre Nosotros</a>
                 </li>
                 <li class="nav-item">
-                   <li class="nav-item active">
                     <a class="nav-link" href="paquetes.html">Nuestro Internet</a>
                 </li>
                 <li class="nav-item">
@@ -40,17 +39,34 @@
 
     <!-- Contenedor Principal -->
     <div class="container my-5">
-        <h2 class="text-center mb-4">Nuestros Paquetes</h2>
+        <h2 class="text-center mb-4">Compra de Paquete</h2>
 
-        <!-- Sección de Paquetes -->
-        <div id="packagesList" class="row">
-            <!-- Aquí se generarán los paquetes dinámicamente -->
+        <!-- Sección de Confirmación de Compra -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" id="packageName"></h5>
+                <p class="card-text" id="packageDescription"></p>
+                <p class="text-primary font-weight-bold">Precio: $<span id="packagePrice"></span></p>
+
+                <!-- Formulario de Compra -->
+                <form id="purchaseForm">
+                    <div class="form-group">
+                        <label for="buyerName">Nombre Completo</label>
+                        <input type="text" class="form-control" id="buyerName" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerEmail">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="buyerEmail" placeholder="Tu correo" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Confirmar Compra</button>
+                </form>
+            </div>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="js/Paquete.js"></script>
+    <script src="js/compra.js"></script>
 </body>
 </html>

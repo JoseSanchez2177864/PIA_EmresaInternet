@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paquetes</title>
+    <title>Opiniones</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
@@ -17,7 +17,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+<div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                     <a class="nav-link" href="index.html">Inicio</a>
                 </li>
@@ -25,7 +25,6 @@
                     <a class="nav-link" href="nosotros.html">Sobre Nosotros</a>
                 </li>
                 <li class="nav-item">
-                   <li class="nav-item active">
                     <a class="nav-link" href="paquetes.html">Nuestro Internet</a>
                 </li>
                 <li class="nav-item">
@@ -40,17 +39,36 @@
 
     <!-- Contenedor Principal -->
     <div class="container my-5">
-        <h2 class="text-center mb-4">Nuestros Paquetes</h2>
+        <h2 class="text-center mb-4">Opiniones</h2>
 
-        <!-- Sección de Paquetes -->
-        <div id="packagesList" class="row">
-            <!-- Aquí se generarán los paquetes dinámicamente -->
+        <!-- Sección de Publicar Opinión -->
+        <div class="card mb-5">
+            <div class="card-body">
+                <h5 class="card-title">Publica tu Opinión</h5>
+                <form id="opinionForm">
+                    <div class="form-group">
+                        <label for="opinionText">Tu Opinión</label>
+                        <textarea class="form-control" id="opinionText" rows="4" placeholder="Escribe tu opinión aquí..." required></textarea>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="isAnonymous">
+                        <label class="form-check-label" for="isAnonymous">Publicar como Anónimo</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Publicar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sección de Opiniones Publicadas -->
+        <h3 class="mb-4">Opiniones Recientes</h3>
+        <div id="opinionsList">
+            <!-- Aquí se generarán dinámicamente las opiniones -->
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="js/Paquete.js"></script>
+    <script src="js/opiniones_usuarios.js"></script>
 </body>
 </html>
