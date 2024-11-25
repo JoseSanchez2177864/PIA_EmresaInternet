@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PIA_PWEB.Models;
 using PIA_PWEB.Models.dbModels;
 
 namespace PIA_PWEB.Controllers
@@ -57,17 +56,11 @@ namespace PIA_PWEB.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdOpinion,IdUsuario,Opinion,Fecha,Anonimo")] OpinioneHR opinione)
+        public async Task<IActionResult> Create([Bind("IdOpinion,IdUsuario,Opinion,Fecha,Anonimo")] Opinione opinione)
         {
             if (ModelState.IsValid)
             {
-                Opinione opinion1 = new Opinione
-                {
-                    Opinion = opinione.Opinion,
-                    Anonimo = opinione.Anonimo,
-                    Fecha = opinione.Fecha,
-                };
-                _context.Opiniones.Add(opinion1);
+                _context.Add(opinione);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

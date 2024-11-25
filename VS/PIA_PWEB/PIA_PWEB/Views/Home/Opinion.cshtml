@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "Opinion";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Opiniones</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Gestión de Opiniones</h1>
+
+    <!-- Botón para cargar opiniones -->
+    <button id="btnCargarOpiniones">Cargar Opiniones</button>
+    <div id="listaOpiniones"></div>
+
+    <!-- Formulario para agregar una opinión -->
+    <h2>Agregar Opinión</h2>
+    <form id="formOpinion">
+        <textarea id="opinion" placeholder="Escribe tu opinión..." required></textarea><br>
+        <label>
+            Anónimo:
+            <input type="checkbox" id="anonimo">
+        </label><br>
+        <button type="submit">Enviar Opinión</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            const apiBaseUrl = "/api/opiniones";
+
+            // Cargar todas las opiniones
+            $("#btnCargarOpiniones").click(function () {
+                $.ajax({
+                    url: apiBaseUrl,
+                    type: "GET",
+                    success: function (opiniones) {
+                        let html = "<ul>";
+                        opiniones.forEach(op => {
+                            html += `<li>${op.opinion} - ${op.fecha} (Anónimo: ${op.anonimo})</li>`;
+                        });
+                        html += "</ul>";
+                        $("#listaOpiniones").html(html);
+                    },
+                    error: function (err) {
+                        console.error("Error al cargar opiniones:", err);
+                        $("#listaOpiniones").html("<p>Error al cargar las opiniones.</p>");
+                    }
+                });
+            });
+
+            // Enviar una nueva opinión
+            $("#formOpinion").submit(function (e) {
+                e.preventDefault(); // Evitar recarga de la página
+                const nuevaOpinion = {
+                    opinion: $("#opinion").val(),
+                    anonimo: $("#anonimo").is(":checked"),
+                    fecha: new Date().toISOString(), // Fecha actual
+                    idUsuario: 1 // Reemplaza con el ID real del usuario
+                };
+
+                $.ajax({
+                    url: apiBaseUrl,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(nuevaOpinion),
+                    success: function (respuesta) {
+                        alert("Opinión agregada con éxito.");
+                        $("#formOpinion")[0].reset(); // Reiniciar formulario
+                    },
+                    error: function (err) {
+                        console.error("Error al agregar opinión:", err);
+                        alert("Error al agregar la opinión.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+

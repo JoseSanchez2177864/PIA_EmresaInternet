@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+@{
+    <!-- Sección de Contactos -->
+    <section class="contactos py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Contáctanos</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Equipo de Soporte</h4>
+                    <p class="lead">Si tienes algún problema técnico o necesitas asistencia con tu servicio de internet, no dudes en ponerte en contacto con nuestro equipo de soporte técnico.</p>
+                    <ul>
+                        <li>Correo electrónico: <a href="mailto:soporte@SpectraNet.com">soporte@SpectraNet.com</a></li>
+                        <li>Teléfono: +52 81 1234 5678</li>
+                        <li>Horario de atención: Lunes a Viernes, 9 AM - 6 PM</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://thumbs.dreamstime.com/b/concepto-de-la-tecnolog%C3%ADa-del-negocio-internet-servicio-atenci%C3%B3n-al-cliente-centro-soporte-t%C3%A9cnico-102190919.jpg" class="img-fluid mb-4" alt="Equipo de Soporte">
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <img src="https://www.geotab.com/CMS-Media-production/About/Contact_Us/sales-inquiry-hero-image2x.jpg" class="img-fluid mb-4" alt="Ventas y Consultas Generales">
+                </div>
+                <div class="col-md-6">
+                    <h4>Ventas y Consultas Generales</h4>
+                    <p class="lead">¿Estás interesado en adquirir uno de nuestros paquetes de internet o tienes alguna pregunta general sobre nuestros servicios? Estamos aquí para ayudarte.</p>
+                    <ul>
+                        <li>Correo electrónico: <a href="mailto:ventas@SpectraNet.com">ventas@SpectraNet.com</a></li>
+                        <li>Teléfono: +52 81 9876 5432</li>
+                        <li>Horario de atención: Lunes a Sábado, 9 AM - 8 PM</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-12 text-center">
+                    <h4>Nuestra Ubicación</h4>
+                    <p class="lead">Visítanos en nuestras oficinas para atención personalizada.</p>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1510.5870232197396!2d-100.39036984179089!3d25.777113601729585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x866291e1034f1a37%3A0xd372942364c0e0a1!2sBienes%20ra%C3%ADces%20villahogar!5e0!3m2!1ses-419!2smx!4v1726436944421!5m2!1ses-419!2smx" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+            <!-- Botón para Opiniones -->
+<div class="row mt-5">
+    <div class="col-md-12 text-center">
+        <h4>¿Qué opinas de nuestro servicio?</h4>
+        <p class="lead">Comparte tu experiencia para ayudarnos a mejorar.</p>
+                    
+        <a class="nav-link" asp-area="" asp-controller="Opiniones" asp-action="Index" class="btn btn-primary btn-lg">
+                        <i class="fas fa-comment-alt">Escribir Opinión</i>
+                    </a>
+    </div>
+</div>
+        </div>
+    </section>
+
+}

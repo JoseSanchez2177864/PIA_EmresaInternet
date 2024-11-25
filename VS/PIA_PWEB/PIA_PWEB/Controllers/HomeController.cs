@@ -18,7 +18,16 @@ namespace PIA_PWEB.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Nosotros()
+        {
+            return View();
+        }public IActionResult Contact()
+        {
+            return View();
+        }public IActionResult Internet()
+        {
+            return View();
+        }public IActionResult Opinion()
         {
             return View();
         }

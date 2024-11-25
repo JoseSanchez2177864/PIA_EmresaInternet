@@ -4,50 +4,81 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="container my-5">
+    <h2 class="text-center mb-4">Opiniones</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Opinion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fecha)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Anonimo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdUsuarioNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Opinion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fecha)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Anonimo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdUsuarioNavigation.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdOpinion">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdOpinion">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdOpinion">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <!-- Sección de Publicar Opinión -->
+    <div class="card mb-5">
+        <div class="card-body">
+            <h5 class="card-title">Publica tu Opinión</h5>
+            <form id="opinionForm">
+                <div class="form-group">
+                    <label for="opinionText">Tu Opinión</label>
+                    <textarea class="form-control" id="opinionText" rows="4" placeholder="Escribe tu opinión aquí..." required></textarea>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="isAnonymous">
+                    <label class="form-check-label" for="isAnonymous">Publicar como Anónimo</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Publicar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sección de Opiniones Publicadas -->
+    <h3 class="mb-4">Opiniones Recientes</h3>
+    @foreach (var item in Model)
+    {
+        <div id="opinionsList">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"> @Html.DisplayFor(modelItem => item.IdUsuarioNavigation.Id)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Opinion)</p>
+                    <p class="text-muted small">Publicado el @Html.DisplayFor(modelItem => item.Fecha)</p>
+                </div>
+            </div>
+            <!-- Aquí se generarán dinámicamente las opiniones -->
+    </div>
+    }
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/opiniones_usuarios.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+    const apiUrl = "/api/Opiniones";
+
+    function cargarOpiniones() {
+        $.get(apiUrl, function (data) {
+            let lista = $("#opinionesList");
+            lista.empty();
+            data.forEach(opinion => {
+                lista.append(`
+<li class="list-group-item"><strong>${opinion.usuario}</strong> (${new Date(opinion.fecha).toLocaleDateString()}): ${opinion.comentario}</li>`);
+            });
+        });
+    }
+
+    $("#opinionForm").submit(function (e) {
+        e.preventDefault();
+        const opinion = {
+            usuario: $("#usuario").val(),
+            comentario: $("#comentario").val()
+        };
+        $.post(apiUrl, JSON.stringify(opinion), function () {
+            cargarOpiniones();
+            $("#opinionForm")[0].reset();
+        }, "json").fail(function () {
+            alert("Error al enviar la opinión.");
+        });
+    });
+
+    cargarOpiniones();
+});
+</script>
+

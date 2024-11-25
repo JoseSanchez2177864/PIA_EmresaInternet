@@ -1,0 +1,71 @@
+﻿@model IEnumerable<PIA_PWEB.Models.dbModels.Opinione>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Gestión de Opiniones</h2>
+    <table id="opinionsTable" class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Opinión</th>
+                <th>Anónimo</th>
+                <th>Usuario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se generarán las filas dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Opinion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fecha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Anonimo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdUsuarioNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Opinion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Anonimo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdUsuarioNavigation.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdOpinion">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdOpinion">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdOpinion">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<PIA_PWEB.Models.dbModels.Paquete>
+
+@{
+    ViewData["Title"] = "Paquetes";
+}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Nuestros Paquetes</h2>
+
+    <!-- Sección de Paquetes -->
+    <div id="packagesList" class="row">
+        <!-- Aquí se generarán los paquetes dinámicamente -->
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                <img src="${paquete.imagen}" class="card-img-top" alt="Imagen del paquete">
+                <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.NombrePaquete)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Descripcion)</p>
+                        <p class="text-primary font-weight-bold">@Html.DisplayFor(modelItem => item.Precio)</p>
+                        <button class="btn btn-success btn-block buy-package" data-id="@Html.DisplayFor(modelItem => item.IdPaquete)">Comprar</button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>

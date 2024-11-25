@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace PIA_PWEB.Models.dbModels;
-
+[Route("api/[controller]")]
+[ApiController]
 public partial class Opinione
 {
     [Key]

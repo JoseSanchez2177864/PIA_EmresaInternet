@@ -10,25 +10,24 @@ using PIA_PWEB.Models.dbModels;
 
 namespace PIA_PWEB.Controllers
 {
-    public class PaquetesController : Controller
+    [Authorize(Roles = "Admin")]
+    public class OpinionesAdminController : Controller
     {
         private readonly PiaInternetContext _context;
 
-        public PaquetesController(PiaInternetContext context)
+        public OpinionesAdminController(PiaInternetContext context)
         {
             _context = context;
         }
 
-        // GET: Paquetes
+        // GET: OpinionesAdmin
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Paquetes.ToListAsync());
-        }public async Task<IActionResult> Index1()
-        {
-            return View(await _context.Paquetes.ToListAsync());
+            var piaInternetContext = _context.Opiniones.Include(o => o.IdUsuarioNavigation);
+            return View(await piaInternetContext.ToListAsync());
         }
 
-        // GET: Paquetes/Details/5
+        // GET: OpinionesAdmin/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,39 +35,42 @@ namespace PIA_PWEB.Controllers
                 return NotFound();
             }
 
-            var paquete = await _context.Paquetes
-                .FirstOrDefaultAsync(m => m.IdPaquete == id);
-            if (paquete == null)
+            var opinione = await _context.Opiniones
+                .Include(o => o.IdUsuarioNavigation)
+                .FirstOrDefaultAsync(m => m.IdOpinion == id);
+            if (opinione == null)
             {
                 return NotFound();
             }
 
-            return View(paquete);
+            return View(opinione);
         }
 
-        // GET: Paquetes/Create
+        // GET: OpinionesAdmin/Create
         public IActionResult Create()
         {
+            ViewData["IdUsuario"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
-        // POST: Paquetes/Create
+        // POST: OpinionesAdmin/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPaquete,NombrePaquete,Precio,Imagen,Descripcion")] Paquete paquete)
+        public async Task<IActionResult> Create([Bind("IdOpinion,IdUsuario,Opinion,Fecha,Anonimo")] Opinione opinione)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(paquete);
+                _context.Add(opinione);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(paquete);
+            ViewData["IdUsuario"] = new SelectList(_context.Users, "Id", "Id", opinione.IdUsuario);
+            return View(opinione);
         }
 
-        // GET: Paquetes/Edit/5
+        // GET: OpinionesAdmin/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,22 +78,23 @@ namespace PIA_PWEB.Controllers
                 return NotFound();
             }
 
-            var paquete = await _context.Paquetes.FindAsync(id);
-            if (paquete == null)
+            var opinione = await _context.Opiniones.FindAsync(id);
+            if (opinione == null)
             {
                 return NotFound();
             }
-            return View(paquete);
+            ViewData["IdUsuario"] = new SelectList(_context.Users, "Id", "Id", opinione.IdUsuario);
+            return View(opinione);
         }
 
-        // POST: Paquetes/Edit/5
+        // POST: OpinionesAdmin/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdPaquete,NombrePaquete,Precio,Imagen,Descripcion")] Paquete paquete)
+        public async Task<IActionResult> Edit(int id, [Bind("IdOpinion,IdUsuario,Opinion,Fecha,Anonimo")] Opinione opinione)
         {
-            if (id != paquete.IdPaquete)
+            if (id != opinione.IdOpinion)
             {
                 return NotFound();
             }
@@ -100,12 +103,12 @@ namespace PIA_PWEB.Controllers
             {
                 try
                 {
-                    _context.Update(paquete);
+                    _context.Update(opinione);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PaqueteExists(paquete.IdPaquete))
+                    if (!OpinioneExists(opinione.IdOpinion))
                     {
                         return NotFound();
                     }
@@ -116,10 +119,11 @@ namespace PIA_PWEB.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(paquete);
+            ViewData["IdUsuario"] = new SelectList(_context.Users, "Id", "Id", opinione.IdUsuario);
+            return View(opinione);
         }
 
-        // GET: Paquetes/Delete/5
+        // GET: OpinionesAdmin/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,34 +131,35 @@ namespace PIA_PWEB.Controllers
                 return NotFound();
             }
 
-            var paquete = await _context.Paquetes
-                .FirstOrDefaultAsync(m => m.IdPaquete == id);
-            if (paquete == null)
+            var opinione = await _context.Opiniones
+                .Include(o => o.IdUsuarioNavigation)
+                .FirstOrDefaultAsync(m => m.IdOpinion == id);
+            if (opinione == null)
             {
                 return NotFound();
             }
 
-            return View(paquete);
+            return View(opinione);
         }
 
-        // POST: Paquetes/Delete/5
+        // POST: OpinionesAdmin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var paquete = await _context.Paquetes.FindAsync(id);
-            if (paquete != null)
+            var opinione = await _context.Opiniones.FindAsync(id);
+            if (opinione != null)
             {
-                _context.Paquetes.Remove(paquete);
+                _context.Opiniones.Remove(opinione);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PaqueteExists(int id)
+        private bool OpinioneExists(int id)
         {
-            return _context.Paquetes.Any(e => e.IdPaquete == id);
+            return _context.Opiniones.Any(e => e.IdOpinion == id);
         }
     }
 }
