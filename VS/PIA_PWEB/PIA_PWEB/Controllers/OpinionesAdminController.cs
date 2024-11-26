@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +15,23 @@ namespace PIA_PWEB.Controllers
     public class OpinionesAdminController : Controller
     {
         private readonly PiaInternetContext _context;
-
-        public OpinionesAdminController(PiaInternetContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public OpinionesAdminController(UserManager<ApplicationUser> userManager, PiaInternetContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
         // GET: OpinionesAdmin
         public async Task<IActionResult> Index()
         {
-            var piaInternetContext = _context.Opiniones.Include(o => o.IdUsuarioNavigation);
-            return View(await piaInternetContext.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+            }
+            return View(await _context.Opiniones.ToListAsync());
         }
 
         // GET: OpinionesAdmin/Details/5

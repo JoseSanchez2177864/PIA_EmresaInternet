@@ -1,57 +1,57 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PIA_PWEB.Models.dbModels;
-
+using System.Linq;
 
 namespace PIA_PWEB.Controllers
 {
-    public class Roles(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager) : Controller
+    public class RolesController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly RoleManager<IdentityRole> _roleManager = roleManager;
-        public IActionResult Index()
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
+
+        public RolesController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
-            var roles = _roleManager.Roles.ToList();
-            return View(roles);
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-        public async Task<IActionResult> AssignRole(string userId, string roleName)
+        public async Task<IActionResult> Index()
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            // Obtén todos los roles
+            var allRoles = _roleManager.Roles.ToList();
+
+            // Obtén todos los usuarios junto con sus roles
+            var users = await _userManager.Users.ToListAsync();
+
+            var userRoles = new List<object>();
+            foreach (var user in users)
             {
-                return NotFound();
+                var userAssignedRoles = await _userManager.GetRolesAsync(user); // Renombramos aquí
+                userRoles.Add(new
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    Roles = userAssignedRoles
+                });
             }
 
-            if (!await _roleManager.RoleExistsAsync(roleName))
+            // Prepara el modelo de vista para pasar los datos
+            var viewModel = new
             {
-                return BadRequest("El rol no existe.");
-            }
-
-            var result = await _userManager.AddToRoleAsync(user, roleName);
-            if (result.Succeeded)
+                Roles = allRoles, // Usamos allRoles en lugar de roles
+                UserRoles = userRoles
+            };
+            var userAC = await _userManager.GetUserAsync(User);
+            if (userAC != null)
             {
-                return RedirectToAction("Index");
+                var roles = await _userManager.GetRolesAsync(userAC);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
             }
-
-            return BadRequest("No se pudo asignar el rol.");
-        }
-
-        public async Task<IActionResult> RemoveRole(string userId, string roleName)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var result = await _userManager.RemoveFromRoleAsync(user, roleName);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return BadRequest("No se pudo remover el rol.");
+            return View(viewModel);
         }
     }
 }
+
+

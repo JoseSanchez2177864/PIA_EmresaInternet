@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,15 +13,23 @@ namespace PIA_PWEB.Controllers
     public class OpinionesController : Controller
     {
         private readonly PiaInternetContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OpinionesController(PiaInternetContext context)
+        public OpinionesController(UserManager<ApplicationUser> userManager, PiaInternetContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
         // GET: Opiniones
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+            }
             var piaInternetContext = _context.Opiniones.Include(o => o.IdUsuarioNavigation);
             return View(await piaInternetContext.ToListAsync());
         }

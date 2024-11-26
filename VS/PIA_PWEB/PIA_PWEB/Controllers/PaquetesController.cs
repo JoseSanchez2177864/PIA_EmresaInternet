@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +14,32 @@ namespace PIA_PWEB.Controllers
     public class PaquetesController : Controller
     {
         private readonly PiaInternetContext _context;
-
-        public PaquetesController(PiaInternetContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public PaquetesController(UserManager<ApplicationUser> userManager, PiaInternetContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
         // GET: Paquetes
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+            }
             return View(await _context.Paquetes.ToListAsync());
-        }public async Task<IActionResult> Index1()
+        }
+        public async Task<IActionResult> Index1()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+            }
             return View(await _context.Paquetes.ToListAsync());
         }
 
@@ -42,7 +57,12 @@ namespace PIA_PWEB.Controllers
             {
                 return NotFound();
             }
-
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+            }
             return View(paquete);
         }
 

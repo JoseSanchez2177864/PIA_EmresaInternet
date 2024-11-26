@@ -1,0 +1,29 @@
+﻿@model dynamic
+
+<!-- Tabla de Usuarios y sus Roles -->
+<h3>Usuarios y sus Roles</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID de Usuario</th>
+            <th>Nombre de Usuario</th>
+            <th>Roles Asignados</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var userRole in Model.UserRoles)
+        {
+            <tr>
+                <td>@userRole.UserId</td>
+                <td>@userRole.UserName</td>
+                <td>
+                    @foreach (var role in userRole.Roles)
+                    {
+                        <span class="badge bg-primary">@role</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

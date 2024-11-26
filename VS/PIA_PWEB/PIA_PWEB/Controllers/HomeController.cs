@@ -1,36 +1,50 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PIA_PWEB.Models;
+using PIA_PWEB.Models.dbModels;
 using System.Diagnostics;
 
 namespace PIA_PWEB.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(UserManager<ApplicationUser> userManager)
         {
-            _logger = logger;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+            }
             return View();
         }
-
-        public IActionResult Nosotros()
+        public async Task<IActionResult> Nosotros()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+            }
             return View();
-        }public IActionResult Contact()
+        } 
+        public async Task<IActionResult> Contact()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+            }
             return View();
-        }public IActionResult Internet()
-        {
-            return View();
-        }public IActionResult Opinion()
-        {
-            return View();
-        }
+        } 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
