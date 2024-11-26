@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PIA_PWEB.Models.dbModels;
 
@@ -22,151 +20,49 @@ namespace PIA_PWEB.Controllers
         }
 
         // GET: Opiniones
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user != null)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
-            }
-            var piaInternetContext = _context.Opiniones.Include(o => o.IdUsuarioNavigation);
-            return View(await piaInternetContext.ToListAsync());
+            var opiniones = await _context.Opiniones
+                .Include(o => o.IdUsuarioNavigation) // Incluir la relación de usuario
+                .OrderByDescending(o => o.Fecha) // Ordenar por fecha descendente
+                .ToListAsync();
+
+            return View(opiniones); // Enviar las opiniones a la vista
         }
 
-        // GET: Opiniones/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var opinione = await _context.Opiniones
-                .Include(o => o.IdUsuarioNavigation)
-                .FirstOrDefaultAsync(m => m.IdOpinion == id);
-            if (opinione == null)
-            {
-                return NotFound();
-            }
-
-            return View(opinione);
-        }
-
-        // GET: Opiniones/Create
-        public IActionResult Create()
-        {
-            ViewData["IdUsuario"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
-        }
-
-        // POST: Opiniones/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Opiniones
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdOpinion,IdUsuario,Opinion,Fecha,Anonimo")] Opinione opinione)
+        public async Task<IActionResult> Index([Bind("Opinion,Anonimo")] Opinione opinione)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(opinione);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdUsuario"] = new SelectList(_context.Users, "Id", "Id", opinione.IdUsuario);
-            return View(opinione);
-        }
-
-        // GET: Opiniones/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var opinione = await _context.Opiniones.FindAsync(id);
-            if (opinione == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdUsuario"] = new SelectList(_context.Users, "Id", "Id", opinione.IdUsuario);
-            return View(opinione);
-        }
-
-        // POST: Opiniones/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdOpinion,IdUsuario,Opinion,Fecha,Anonimo")] Opinione opinione)
-        {
-            if (id != opinione.IdOpinion)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                // Obtener el usuario autenticado
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
                 {
-                    _context.Update(opinione);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OpinioneExists(opinione.IdOpinion))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdUsuario"] = new SelectList(_context.Users, "Id", "Id", opinione.IdUsuario);
-            return View(opinione);
-        }
+                    // Asignar valores a la nueva opinión
+                    opinione.IdUsuario = user.Id;
+                    opinione.Fecha = DateTime.Now; // Fecha actual
 
-        // GET: Opiniones/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                    // Agregar la opinión a la base de datos
+                    _context.Add(opinione);
+                    await _context.SaveChangesAsync(); // Guardar los cambios
+
+                    // Redirigir a Index para mostrar la lista actualizada
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
 
-            var opinione = await _context.Opiniones
+            // Si falla, recargar la lista de opiniones
+            var opiniones = await _context.Opiniones
                 .Include(o => o.IdUsuarioNavigation)
-                .FirstOrDefaultAsync(m => m.IdOpinion == id);
-            if (opinione == null)
-            {
-                return NotFound();
-            }
+                .OrderByDescending(o => o.Fecha)
+                .ToListAsync();
 
-            return View(opinione);
-        }
-
-        // POST: Opiniones/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var opinione = await _context.Opiniones.FindAsync(id);
-            if (opinione != null)
-            {
-                _context.Opiniones.Remove(opinione);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool OpinioneExists(int id)
-        {
-            return _context.Opiniones.Any(e => e.IdOpinion == id);
+            return View(opiniones); // Regresar a la vista con los datos actuales
         }
     }
 }

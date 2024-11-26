@@ -18,7 +18,11 @@
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.NombrePaquete)</h5>
                         <p class="card-text">@Html.DisplayFor(modelItem => item.Descripcion)</p>
                         <p class="text-primary font-weight-bold">$@Html.DisplayFor(modelItem => item.Precio)</p>
-                        <button class="btn btn-success btn-block buy-package" data-id="@Html.DisplayFor(modelItem => item.IdPaquete)">Comprar</button>
+                        <form method="post" action="@Url.Action("RegistrarVenta", "Venta")">
+                            <input type="hidden" name="idPaquete" value="@item.IdPaquete" />
+                            <button type="submit" class="btn btn-success">Comprar</button>
+                        </form>
+
                 </div>
             </div>
         </div>

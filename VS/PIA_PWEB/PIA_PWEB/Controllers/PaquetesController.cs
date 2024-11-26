@@ -138,6 +138,41 @@ namespace PIA_PWEB.Controllers
             }
             return View(paquete);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegistrarVenta(int idPaquete)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized(); // Si el usuario no está autenticado
+            }
+
+            // Obtener el paquete seleccionado por el usuario
+            var paquete = await _context.Paquetes.FindAsync(idPaquete);  // Usamos 'idPaquete' en vez de 'paqueteId'
+            if (paquete == null)
+            {
+                return NotFound(); // Si no se encuentra el paquete
+            }
+
+            // Crear una nueva venta asociada con el usuario y el paquete
+            var nuevaVenta = new Venta
+            {
+                IdUsuario = user.Id, // El usuario autenticado
+                Fecha = DateTime.Now, // Fecha actual
+                TotalVenta = paquete.Precio // Precio del paquete
+            };
+
+            // No asignamos IdVenta manualmente; EF Core lo generará automáticamente
+
+            // Agregar la venta al contexto y guardar los cambios
+            _context.Ventas.Add(nuevaVenta);
+            await _context.SaveChangesAsync();
+
+            // Después de guardar, puedes redirigir a la lista de ventas o a donde necesites
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // GET: Paquetes/Delete/5
         public async Task<IActionResult> Delete(int? id)

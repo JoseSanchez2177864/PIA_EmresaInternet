@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<PIA_PWEB.Models.dbModels.Opinione>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Opiniones";
 }
 
 <div class="container my-5">
@@ -11,13 +11,14 @@
     <div class="card mb-5">
         <div class="card-body">
             <h5 class="card-title">Publica tu Opinión</h5>
-            <form id="opinionForm">
+            <form asp-action="Index" method="post">
+
                 <div class="form-group">
                     <label for="opinionText">Tu Opinión</label>
-                    <textarea class="form-control" id="opinionText" rows="4" placeholder="Escribe tu opinión aquí..." required></textarea>
+                    <textarea class="form-control" id="opinionText" name="Opinion" rows="4" placeholder="Escribe tu opinión aquí..." required></textarea>
                 </div>
                 <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="isAnonymous">
+                    <input type="checkbox" class="form-check-input" id="isAnonymous" name="Anonimo">
                     <label class="form-check-label" for="isAnonymous">Publicar como Anónimo</label>
                 </div>
                 <button type="submit" class="btn btn-primary">Publicar</button>
@@ -27,58 +28,33 @@
 
     <!-- Sección de Opiniones Publicadas -->
     <h3 class="mb-4">Opiniones Recientes</h3>
-    @foreach (var item in Model)
-    {
-        <div id="opinionsList">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title"> @Html.DisplayFor(modelItem => item.IdUsuarioNavigation.Id)</h5>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.Opinion)</p>
-                    <p class="text-muted small">Publicado el @Html.DisplayFor(modelItem => item.Fecha)</p>
+    <div id="opinionsList">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @if (item.Anonimo)
+                        {
+                            <h5 class="card-title">Publicado por: Anónimo</h5>
+                        }
+                        else
+                        {
+                            <h5 class="card-title">Publicado por: @item.IdUsuarioNavigation.Id</h5>
+                        }
+                        <p class="card-text">@item.Opinion</p>
+                        <p class="text-muted small">Publicado el @item.Fecha.ToString("dd/MM/yyyy")</p>
+                    </div>
                 </div>
-            </div>
-            <!-- Aquí se generarán dinámicamente las opiniones -->
+            }
+        }
+        else
+        {
+            <p class="text-muted">No hay opiniones publicadas aún.</p>
+        }
     </div>
-    }
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<script src="js/opiniones_usuarios.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="/js/jquery-3.7.1.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-    const apiUrl = "/api/Opiniones";
-
-    function cargarOpiniones() {
-        $.get(apiUrl, function (data) {
-            let lista = $("#opinionesList");
-            lista.empty();
-            data.forEach(opinion => {
-                lista.append(`
-<li class="list-group-item"><strong>${opinion.usuario}</strong> (${new Date(opinion.fecha).toLocaleDateString()}): ${opinion.comentario}</li>`);
-            });
-        });
-    }
-
-    $("#opinionForm").submit(function (e) {
-        e.preventDefault();
-        const opinion = {
-            usuario: $("#usuario").val(),
-            comentario: $("#comentario").val()
-        };
-        $.post(apiUrl, JSON.stringify(opinion), function () {
-            cargarOpiniones();
-            $("#opinionForm")[0].reset();
-        }, "json").fail(function () {
-            alert("Error al enviar la opinión.");
-        });
-    });
-
-    cargarOpiniones();
-});
-</script>
-

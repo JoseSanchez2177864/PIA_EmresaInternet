@@ -43,6 +43,11 @@ public partial class PiaInternetContext : IdentityDbContext<ApplicationUser, Ide
 
         modelBuilder.Entity<Opinione>(entity =>
         {
+            modelBuilder.Entity<Venta>(entity =>
+            {
+                entity.HasKey(e => e.IdVenta); // Clave primaria
+                entity.Property(e => e.IdVenta).ValueGeneratedOnAdd(); // Auto-incremental
+            });
             entity.HasKey(e => e.IdOpinion).HasName("PK__Opinione__83A5899BDF0E477B");
 
             entity.Property(e => e.IdOpinion).ValueGeneratedNever();

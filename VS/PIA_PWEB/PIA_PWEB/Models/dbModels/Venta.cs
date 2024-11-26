@@ -10,6 +10,7 @@ public partial class Venta
 {
     [Key]
     [Column("idVenta")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]  // Asegúrate de que esté configurado para autoincrementarse
     public int IdVenta { get; set; }
 
     [Column("idUsuario")]
