@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<ApplicationUser>
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "IndexRol";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Roles</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>
+                    @string.Join(", ", await UserManager.GetRolesAsync(user))
+                </td>
+                <td>
+                    <a href="/UserRole/AssignRole?userId=@user.Id&roleName=Admin">Asignar Admin</a>
+                    <a href="/UserRole/RemoveRole?userId=@user.Id&roleName=Admin">Remover Admin</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

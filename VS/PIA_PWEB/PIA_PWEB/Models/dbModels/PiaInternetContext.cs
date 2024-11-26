@@ -8,6 +8,7 @@ namespace PIA_PWEB.Models.dbModels;
 
 public partial class PiaInternetContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
 {
+
     public PiaInternetContext()
     {
     }
