@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "Estadisticas";
+}
+
+<!-- Contenedor Principal -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Estadísticas de Ventas</h2>
+
+    <!-- Filtros -->
+    <div class="mb-4">
+        <label for="packageFilter" class="form-label">Filtrar por Paquete</label>
+        <select class="form-control" id="packageFilter">
+            <!-- Opciones dinámicas generadas por JS -->
+        </select>
+    </div>
+
+    <!-- Gráfico de Ventas -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Ventas por Mes</h5>
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/estadisticas.js"></script>
+
+

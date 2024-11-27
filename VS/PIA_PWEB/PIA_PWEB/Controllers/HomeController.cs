@@ -45,6 +45,16 @@ namespace PIA_PWEB.Controllers
             }
             return View();
         } 
+        public async Task<IActionResult> Estadisticas()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+            }
+            return View();
+        } 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
