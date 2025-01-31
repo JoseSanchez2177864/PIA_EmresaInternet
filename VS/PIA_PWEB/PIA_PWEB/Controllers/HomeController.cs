@@ -21,7 +21,7 @@ namespace PIA_PWEB.Controllers
             if (user != null)
             {
                 var roles = await _userManager.GetRolesAsync(user);
-                ViewBag.UserRole = roles.FirstOrDefault(); // Pasamos el rol al ViewBag
+                ViewBag.UserRole = roles.FirstOrDefault(); 
             }
             return View();
         }
